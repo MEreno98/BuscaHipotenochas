@@ -13,8 +13,16 @@
     tools:context="com.example.a8fdi12.buscahipotenochas.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/tablero"
+        android:columnCount="8"
+        android:rowCount="8">
+
+    </GridLayout>
 </RelativeLayout>

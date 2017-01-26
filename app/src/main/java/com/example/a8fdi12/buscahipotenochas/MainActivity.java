@@ -1,5 +1,7 @@
 package com.example.a8fdi12.buscahipotenochas;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(getText(R.string.action_change));
                 return true;
             case R.id.action_instrucciones:
-                //Falta el metodo
+                showIntrucciones();
                 System.out.println(getText(R.string.action_instrucciones));
                 return true;
             case R.id.action_start:
@@ -54,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showIntrucciones(){
+        AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+
+        dialogo1.setTitle(getText(R.string.action_instrucciones));
+        dialogo1.setMessage(getText(R.string.dialog_instrucciones));
+        dialogo1.setNeutralButton(getText(R.string.dialog_instrucciones_btn), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                dialogo1.dismiss();
+            }
+        });
+
+        dialogo1.show();
     }
 
 
