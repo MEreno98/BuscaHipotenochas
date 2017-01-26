@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">BuscaHipotenochas</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Busca Hipotenochas</string>
+    <string name="action_change">Cambiar Hipotenocha</string>
+    <string name="action_instrucciones">Instrucciones</string>
+    <string name="action_start">Comenzar juego</string>
+    <string name="action_settings">Opciones</string>
 </resources>
