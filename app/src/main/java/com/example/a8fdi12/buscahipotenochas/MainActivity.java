@@ -3,16 +3,19 @@ package com.example.a8fdi12.buscahipotenochas;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Settings settings;
+    private GridLayout l_tablero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        l_tablero = (GridLayout) findViewById(R.id.l_tablero);
+
+        settings = new Settings(16,16,60);
+        settings.setSettings(l_tablero);
+
+        dibujarTablero();
+    }
+
+    private void dibujarTablero(){
+        Button b;
+        System.out.println(l_tablero.getLayoutParams().width);
+
+
+
+        for (int x = 0;x<settings.getCells();x++){
+            b = new Button(this);
+            b.setLayoutParams(new LinearLayout.LayoutParams(100,100));
+            b.setText(Integer.toString(x+1));
+            b.setId(x);
+            l_tablero.addView(b,x);
+        }
     }
 
     @Override
@@ -42,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(getText(R.string.action_change));
                 return true;
             case R.id.action_instrucciones:
+                //Mostrar instrucciones
                 showIntrucciones();
                 System.out.println(getText(R.string.action_instrucciones));
                 return true;
@@ -71,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         dialogo1.show();
     }
+
 
 
 }
