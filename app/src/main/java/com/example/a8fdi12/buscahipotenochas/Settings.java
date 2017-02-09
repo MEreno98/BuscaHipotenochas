@@ -17,6 +17,7 @@ public class Settings {
     }
 
     public void setSettings(GridLayout tablero){
+        tablero.removeAllViews();
         tablero.setColumnCount(this.columns);
         tablero.setRowCount(this.rows);
 
@@ -31,5 +32,13 @@ public class Settings {
 
     public int getCells(){
         return this.columns * this.rows;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
     }
 }

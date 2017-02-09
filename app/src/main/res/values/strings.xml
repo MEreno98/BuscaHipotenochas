@@ -8,4 +8,8 @@
     <string name="dialog_instrucciones_btn">Ok</string>
     <string name="action_start">Comenzar juego</string>
     <string name="action_settings">Opciones</string>
+    <string name="settings_title">Elija una dificultad</string>
+    <string name="s_level_1">Principiante</string>
+    <string name="s_level_2">Amateur</string>
+    <string name="s_level_3">Avanzado</string>
 </resources>
