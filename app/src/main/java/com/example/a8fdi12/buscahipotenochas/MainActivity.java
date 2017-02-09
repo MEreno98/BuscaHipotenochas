@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Settings settings;
     private GridLayout l_tablero;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +176,5 @@ public class MainActivity extends AppCompatActivity {
 
         dialogo1.show();
     }
-
-
 
 }

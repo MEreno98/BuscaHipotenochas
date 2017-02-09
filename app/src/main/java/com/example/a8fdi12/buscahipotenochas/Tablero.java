@@ -9,5 +9,8 @@ import java.util.ArrayList;
 
 public class Tablero {
 
+   private Casilla tablero [][];
+
+
 
 }
