@@ -17,6 +17,31 @@ public class Casilla {
         this.estado = 0;
     }
 
-    
+    public int getX() {
+        return x;
+    }
 
+    public int getY() {
+        return y;
+    }
+
+    public int getMina() {
+        return mina;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setMina(int mina) {
+        this.mina = mina;
+    }
+
+    public void incrMina(){
+        this.mina += 1;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
 }

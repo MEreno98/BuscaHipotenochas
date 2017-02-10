@@ -41,4 +41,6 @@ public class Settings {
     public int getColumns() {
         return columns;
     }
+
+    public int getMines() {return mines; }
 }

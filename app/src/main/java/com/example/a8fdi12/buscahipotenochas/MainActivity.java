@@ -17,9 +17,7 @@ import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Settings settings;
-    private GridLayout l_tablero;
-
+    private Tablero tablero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +27,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Obtenemos el gridLayout
-        l_tablero = (GridLayout) findViewById(R.id.l_tablero);
+        GridLayout gl_tabelo = (GridLayout) findViewById(R.id.l_tablero);
 
-        //Creamos las opcion de principiante
-        settings = new Settings(8,8,10);
-        settings.setSettings(l_tablero);
+        //Creamos las opcion de principiante y establecemos las opciones
+        Settings settings = new Settings(8,8,10);
+        settings.setSettings(gl_tabelo);
 
-        dibujarTablero();
+        //Creamos el tablero
+        tablero = new Tablero(settings);
+        tablero.crearTablero();
+
+        //dibujarTablero();
     }
 
-    private void dibujarTablero(){
+    /*private void dibujarTablero(){
         Button b;
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             b.setId(x);
             l_tablero.addView(b,x);
         }
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
+                Settings settings = tablero.getSettings();
+                GridLayout gl_tablero = (GridLayout) findViewById(R.id.l_tablero);
+
                 switch(item)
                 {
                     case 0:
@@ -150,14 +155,15 @@ public class MainActivity extends AppCompatActivity {
                         wait(200);
                     }
                 }
-                catch(InterruptedException ex){
-                }
+                catch(InterruptedException ex){}
 
-                settings.setSettings(l_tablero);
-                dibujarTablero();
+                settings.setSettings(gl_tablero);
+                tablero.setSettings(settings);
+                //dibujarTablero();
                 dialog.dismiss();
             }
         });
+
         alertDialog1 = builder.create();
         alertDialog1.show();
 
