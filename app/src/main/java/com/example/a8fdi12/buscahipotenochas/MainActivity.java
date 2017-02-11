@@ -12,10 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private Tablero tablero;
 
@@ -36,29 +36,77 @@ public class MainActivity extends AppCompatActivity {
         //Creamos el tablero
         tablero = new Tablero(settings);
         tablero.crearTablero();
-
-        //dibujarTablero();
+        dibujar(gl_tabelo);
     }
 
-    /*private void dibujarTablero(){
-        Button b;
+    public void dibujar(GridLayout gl_tablero){
+        Button btn;
+        ImageButton img_btn;
 
+        //Obtener el tamaño de la pantalla
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = calculateHeigth(size.y);
+        int height = this.calcularHeight(size.y);
 
-        for (int x = 0;x<settings.getCells();x++){
-            b = new Button(this);
-            b.setLayoutParams(new LinearLayout.LayoutParams(width/settings.getColumns(),height/settings.getRows()));
-            //b.setLayoutParams(new LinearLayout.LayoutParams(100,100));
-            b.setBackgroundResource(R.drawable.custom_button);
-            b.setText(Integer.toString(x+1));
-            b.setId(x);
-            l_tablero.addView(b,x);
+        //Obtener opciones
+        Settings settings = tablero.getSettings();
+
+        int z = 0;
+
+        for(int x = 0; x < settings.getColumns(); x++){
+            for(int y = 0; y < settings.getRows(); y++){
+
+                Casilla casilla = tablero.getCasilla(x,y);
+
+                if (casilla.getMina() == 9){
+                    img_btn = new ImageButton(this);
+
+                    img_btn.setLayoutParams(new LinearLayout.LayoutParams(width/settings.getColumns(),height/settings.getRows()));
+                    img_btn.setBackgroundResource(R.drawable.custom_button);
+
+                    img_btn.setImageResource(R.mipmap.bomb);
+                    img_btn.setId(x);
+
+                    gl_tablero.addView(img_btn,z);
+                }else{
+                    btn = new Button(this);
+
+                    btn.setLayoutParams(new LinearLayout.LayoutParams(width/settings.getColumns(),height/settings.getRows()));
+                    btn.setBackgroundResource(R.drawable.custom_button);
+
+                    btn.setText(Integer.toString(casilla.getMina()));
+                    btn.setId(x);
+
+                    gl_tablero.addView(btn,z);
+                }
+
+                z++;
+            }
+
         }
-    }*/
+
+    }
+
+    private int calcularHeight(int displayHeight){
+        // action bar height
+        int actionBarHeight = 0;
+        final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize }
+        );
+        actionBarHeight = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        // navigation bar height
+        int navigationBarHeight = 0;
+        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            navigationBarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        return displayHeight - (actionBarHeight + navigationBarHeight) + 75;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,11 +129,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_instrucciones:
                 //Mostrar instrucciones
                 showIntrucciones();
-                System.out.println(getText(R.string.action_instrucciones));
+                //System.out.println(getText(R.string.action_instrucciones));
                 return true;
             case R.id.action_start:
-                //Falta el metodo
-                System.out.println(getText(R.string.action_start));
+                //Juego nuevo
+                newGame();
+                //System.out.println(getText(R.string.action_start));
                 return true;
             case R.id.action_settings:
                 //Falta el metodo
@@ -97,56 +146,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int calculateHeigth(int displayHeigth){
-        // status bar height
-        /*int statusBarHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }*/
-
-        // action bar height
-        int actionBarHeight = 0;
-        final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
-                new int[] { android.R.attr.actionBarSize }
-        );
-        actionBarHeight = (int) styledAttributes.getDimension(0, 0);
-        styledAttributes.recycle();
-
-        // navigation bar height
-        int navigationBarHeight = 0;
-        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            navigationBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
-
-        return displayHeigth - (actionBarHeight + navigationBarHeight) + 75;
-    }
-
     private void CreateAlertDialogWithRadioButtonGroup(){
         AlertDialog alertDialog1;
         CharSequence[] values = {getString(R.string.s_level_1),getString(R.string.s_level_2),getString(R.string.s_level_3)};
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
         builder.setTitle(getString(R.string.settings_title));
         builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
                 Settings settings = tablero.getSettings();
-                GridLayout gl_tablero = (GridLayout) findViewById(R.id.l_tablero);
 
                 switch(item)
                 {
                     case 0:
                         settings.changeSettings(8,8,10);
-                        //Toast.makeText(MainActivity.this, "First Item Clicked", Toast.LENGTH_LONG).show();
                         break;
                     case 1:
                         settings.changeSettings(12,12,30);
-                        //Toast.makeText(MainActivity.this, "Second Item Clicked", Toast.LENGTH_LONG).show();
                         break;
                     case 2:
                         settings.changeSettings(16,16,60);
-                        //Toast.makeText(MainActivity.this, "Third Item Clicked", Toast.LENGTH_LONG).show();
                         break;
                 }
 
@@ -157,16 +177,26 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch(InterruptedException ex){}
 
-                settings.setSettings(gl_tablero);
-                tablero.setSettings(settings);
-                //dibujarTablero();
+                tablero = new Tablero(settings);
+                newGame();
+
                 dialog.dismiss();
             }
         });
 
         alertDialog1 = builder.create();
         alertDialog1.show();
+    }
 
+    private void newGame(){
+        GridLayout gl_tablero = (GridLayout) findViewById(R.id.l_tablero);
+        gl_tablero.removeAllViews();
+
+        gl_tablero.setColumnCount(tablero.getSettings().getColumns());
+        gl_tablero.setRowCount(tablero.getSettings().getRows());
+
+        tablero.crearTablero();
+        dibujar(gl_tablero);
     }
 
     private void showIntrucciones(){

@@ -6,7 +6,7 @@
         Ten cuidado porque si pulsas en una hipotenocha escondida, perderás. Si crees o tienes la certeza de que hay una hipotenocha, haz un click largo sobre la casilla
         para señalarla. No hagas un click largo en una casilla donde no hay una hipotenocha porque perderás. Ganas una vez hayas encontrado todas las hipotenochas.</string>
     <string name="dialog_instrucciones_btn">Ok</string>
-    <string name="action_start">Comenzar juego</string>
+    <string name="action_start">Comenzar juego nuevo</string>
     <string name="action_settings">Opciones</string>
     <string name="settings_title">Elija una dificultad</string>
     <string name="s_level_1">Principiante</string>

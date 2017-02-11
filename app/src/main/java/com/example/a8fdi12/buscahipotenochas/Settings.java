@@ -30,10 +30,6 @@ public class Settings {
         this.mines = mines;
     }
 
-    public int getCells(){
-        return this.columns * this.rows;
-    }
-
     public int getRows() {
         return rows;
     }
