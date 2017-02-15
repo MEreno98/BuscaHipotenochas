@@ -80,6 +80,11 @@ public class Tablero {
       this.estado = estado;
    }
 
+
+   public void resetContadorMinas() {
+      this.contadorMinas = 0;
+   }
+
    private boolean comprobarMinas() {
       if(contadorMinas == settings.getMines()){
          return true;

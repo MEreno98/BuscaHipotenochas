@@ -63,9 +63,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int z = 0;
 
+        //Recorrer el tablero
         for(int x = 0; x < settings.getColumns(); x++){
             for(int y = 0; y < settings.getRows(); y++){
 
+                //Obtener la casilla
                 Casilla casilla = tablero.getCasilla(x,y);
 
                 if (casilla.getMina() == 9){
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     gl_tablero.addView(btn,z);
                 }
 
+                //Guardar la casilla
                 tablero.setCasilla(casilla,x,y);
                 z++;
             }
@@ -216,9 +219,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void newGame(){
+        //Obtener tablero y eliminar todos los botones
         GridLayout gl_tablero = (GridLayout) findViewById(R.id.l_tablero);
         gl_tablero.removeAllViews();
 
+        //Reiniciar el contador de minas, crear el tablero de nuevo y dibujarlo
+        tablero.resetContadorMinas();
         tablero.crearTablero();
         dibujar(gl_tablero);
     }
@@ -241,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         for(int x = 0; x < tablero.getSettings().getColumns(); x++){
             for(int y = 0; y < tablero.getSettings().getRows(); y++){
+                //Llamar al metodo click
                 click(x,y,view.getId());
             }
         }
@@ -261,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //Cambiar estado marcado
                             casilla.setEstado(2);
 
-                            //Mostrar imagen de explosion en el boton y deshablitar el boton
+                            //Mostrar imagen de explosion en el boton y deshabilitar el boton
                             ImageButton img_b = (ImageButton) view;
                             img_b.setImageResource(tablero.getSettings().getIcon());
                             img_b.setEnabled(false);
@@ -281,15 +288,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //Cambiar estado destapado
                             casilla.setEstado(1);
 
-                            //Mostrar el texto en el boton y deshablitar el boton
+                            //Mostrar el texto en el boton y deshabilitar el boton
                             Button b = (Button) view;
-                            b.setText(Integer.toString(casilla.getMina()));
+                            if(casilla.getMina() != 0){
+                                b.setText(Integer.toString(casilla.getMina()));
+                            }
                             b.setEnabled(false);
                             b.setBackgroundResource(R.drawable.custom_button_disabled);
 
                             //Guardar la casilla
                             tablero.setCasilla(casilla,x,y);
-
                             terminar(false);
                         }
                     }
@@ -313,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //Cambiar estado destapado
                     casilla.setEstado(1);
 
-                    //Mostrar el texto en el boton y deshablitar el boton
+                    //Mostrar el texto en el boton y deshabilitar el boton
                     Button b = (Button) findViewById(casilla.getId());
                     b.setEnabled(false);
                     b.setBackgroundResource(R.drawable.custom_button_disabled);
@@ -324,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //Recorrer el contorno de la casilla
                         for (int x2 = max(0,x-1); x2 < min(tablero.getSettings().getColumns(),x+2); x2++){
                             for (int y2 = max(0,y-1); y2 < min(tablero.getSettings().getRows(), y+2); y2++){
+                                //Volver ha llamar a metodo click con la nueva casilla
                                 click(x2,y2,tablero.getCasilla(x2,y2).getId());
                             }
                         }
@@ -338,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //Cambiar estado destapado
                     casilla.setEstado(1);
 
-                    //Mostrar imagen de explosion en el boton y deshablitar el boton
+                    //Mostrar imagen de explosion en el boton y deshabilitar el boton
                     ImageButton img_b = (ImageButton) findViewById(casilla.getId());
                     img_b.setImageResource(R.drawable.bomb_click);
                     img_b.setEnabled(false);
@@ -394,7 +403,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Button b = (Button) findViewById(casilla.getId());
 
                         //Mostrar el texto en el boton y deshablitar el boton
-                        b.setText(Integer.toString(casilla.getMina()));
+                        if(casilla.getMina() != 0){
+                            b.setText(Integer.toString(casilla.getMina()));
+                        }
                         b.setEnabled(false);
                         b.setBackgroundResource(R.drawable.custom_button_disabled);
                     }else{
