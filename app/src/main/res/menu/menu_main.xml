@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_changehipo"
         android:orderInCategory="1"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/bomb1"
         android:title="@string/action_change"
         app:showAsAction="ifRoom"/>
 

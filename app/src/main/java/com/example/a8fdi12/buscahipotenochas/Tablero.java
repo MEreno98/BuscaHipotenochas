@@ -67,11 +67,24 @@ public class Tablero {
       return casillas[x][y];
    }
 
-   public void minaEncontrada(){
-      contadorMinas += 1;
+   public void setCasilla(Casilla casilla, int x, int y){
+      casillas[x][y] = casilla;
+   }
 
-      if (contadorMinas == settings.getMines()){
-         estado = 2;
+   public boolean minaEncontrada(){
+      contadorMinas ++;
+      return comprobarMinas();
+   }
+
+   public void setEstado(int estado) {
+      this.estado = estado;
+   }
+
+   private boolean comprobarMinas() {
+      if(contadorMinas == settings.getMines()){
+         return true;
+      }else{
+         return false;
       }
    }
 }

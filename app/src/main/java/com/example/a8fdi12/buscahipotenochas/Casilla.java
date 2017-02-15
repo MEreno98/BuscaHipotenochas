@@ -7,6 +7,7 @@ package com.example.a8fdi12.buscahipotenochas;
 public class Casilla {
 
     private int x,y;
+    private int id;
     private int mina; //[0-8] cuantas minas hay alrededor y 9 hay mina en la casilla
     private int estado;// 0:tapado, 1:descubierto, 2:bandera
 
@@ -43,5 +44,13 @@ public class Casilla {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

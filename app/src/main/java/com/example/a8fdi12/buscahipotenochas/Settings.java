@@ -8,12 +8,13 @@ import android.widget.GridLayout;
 
 public class Settings {
 
-    private int columns,rows,mines;
+    private int columns,rows,mines,icon;
 
-    public Settings(int columns, int rows, int mines) {
+    public Settings(int columns, int rows, int mines, int icon) {
         this.columns = columns;
         this.rows = rows;
         this.mines = mines;
+        this.icon = icon;
     }
 
     public void setSettings(GridLayout tablero){
@@ -39,4 +40,12 @@ public class Settings {
     }
 
     public int getMines() {return mines; }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
 }

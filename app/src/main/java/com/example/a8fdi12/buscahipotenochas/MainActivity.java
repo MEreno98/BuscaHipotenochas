@@ -10,12 +10,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-public class MainActivity extends AppCompatActivity{
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener{
 
     private Tablero tablero;
 
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity{
         GridLayout gl_tabelo = (GridLayout) findViewById(R.id.l_tablero);
 
         //Creamos las opcion de principiante y establecemos las opciones
-        Settings settings = new Settings(8,8,10);
+        Settings settings = new Settings(8,8,10,R.drawable.bomb1);
         settings.setSettings(gl_tabelo);
 
         //Creamos el tablero
@@ -53,6 +57,10 @@ public class MainActivity extends AppCompatActivity{
         //Obtener opciones
         Settings settings = tablero.getSettings();
 
+        //Establecer
+        gl_tablero.setColumnCount(tablero.getSettings().getColumns());
+        gl_tablero.setRowCount(tablero.getSettings().getRows());
+
         int z = 0;
 
         for(int x = 0; x < settings.getColumns(); x++){
@@ -61,27 +69,46 @@ public class MainActivity extends AppCompatActivity{
                 Casilla casilla = tablero.getCasilla(x,y);
 
                 if (casilla.getMina() == 9){
+                    //Crear image button
                     img_btn = new ImageButton(this);
 
+                    //Establecer el tamaño y estilo del boton
                     img_btn.setLayoutParams(new LinearLayout.LayoutParams(width/settings.getColumns(),height/settings.getRows()));
                     img_btn.setBackgroundResource(R.drawable.custom_button);
 
-                    img_btn.setImageResource(R.mipmap.bomb);
-                    img_btn.setId(x);
+                    //img_btn.setImageResource(settings.getIcon());
+                    //Establecer el id
+                    casilla.setId(z);
+                    img_btn.setId(z);
 
+                    //Añadir el los eventos
+                    img_btn.setOnClickListener(this);
+                    img_btn.setOnLongClickListener(this);
+
+                    //Añadir el boton
                     gl_tablero.addView(img_btn,z);
                 }else{
+                    //Crear button
                     btn = new Button(this);
 
+                    //Establecer el tamaño y estilo del boton
                     btn.setLayoutParams(new LinearLayout.LayoutParams(width/settings.getColumns(),height/settings.getRows()));
                     btn.setBackgroundResource(R.drawable.custom_button);
 
-                    btn.setText(Integer.toString(casilla.getMina()));
-                    btn.setId(x);
+                    //btn.setText(Integer.toString(casilla.getMina()));
+                    //Establecer el id
+                    casilla.setId(z);
+                    btn.setId(z);
+
+
+                    //Añadir evento
+                    btn.setOnClickListener(this);
+                    btn.setOnLongClickListener(this);
 
                     gl_tablero.addView(btn,z);
                 }
 
+                tablero.setCasilla(casilla,x,y);
                 z++;
             }
 
@@ -192,9 +219,6 @@ public class MainActivity extends AppCompatActivity{
         GridLayout gl_tablero = (GridLayout) findViewById(R.id.l_tablero);
         gl_tablero.removeAllViews();
 
-        gl_tablero.setColumnCount(tablero.getSettings().getColumns());
-        gl_tablero.setRowCount(tablero.getSettings().getRows());
-
         tablero.crearTablero();
         dibujar(gl_tablero);
     }
@@ -213,4 +237,177 @@ public class MainActivity extends AppCompatActivity{
         dialogo1.show();
     }
 
+    @Override
+    public void onClick(View view) {
+        for(int x = 0; x < tablero.getSettings().getColumns(); x++){
+            for(int y = 0; y < tablero.getSettings().getRows(); y++){
+                click(x,y,view.getId());
+            }
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        for(int x = 0; x < tablero.getSettings().getColumns(); x++){
+            for(int y = 0; y < tablero.getSettings().getRows(); y++){
+                //Obtener la casilla
+                Casilla casilla = tablero.getCasilla(x,y);
+
+                //Comprobar si la casilla coincide con la del evento
+                if(view.getId() == casilla.getId()){
+                    if(casilla.getMina() == 9){
+                        //Comprobar el estado de casilla
+                        if(casilla.getEstado() == 0){
+                            //Cambiar estado marcado
+                            casilla.setEstado(2);
+
+                            //Mostrar imagen de explosion en el boton y deshablitar el boton
+                            ImageButton img_b = (ImageButton) view;
+                            img_b.setImageResource(tablero.getSettings().getIcon());
+                            img_b.setEnabled(false);
+                            img_b.setBackgroundResource(R.drawable.custom_button_disabled);
+
+                            //Guardar la casilla
+                            tablero.setCasilla(casilla,x,y);
+
+                            //Aumentar contador minas
+                            if(tablero.minaEncontrada()){
+                                terminar(true);
+                            }
+                        }
+                    }else{
+                        //Comprobar el estado de casilla
+                        if(casilla.getEstado() == 0){
+                            //Cambiar estado destapado
+                            casilla.setEstado(1);
+
+                            //Mostrar el texto en el boton y deshablitar el boton
+                            Button b = (Button) view;
+                            b.setText(Integer.toString(casilla.getMina()));
+                            b.setEnabled(false);
+                            b.setBackgroundResource(R.drawable.custom_button_disabled);
+
+                            //Guardar la casilla
+                            tablero.setCasilla(casilla,x,y);
+
+                            terminar(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void click(int x, int y, int id){
+        //Obtener la casilla
+        Casilla casilla = tablero.getCasilla(x,y);
+
+        //Comprobar si la casilla coincide con la del evento
+        if(id == casilla.getId()){
+            //Comprobar si hay mina
+            if(casilla.getMina() != 9){
+                //Comprobar el estado de casilla
+                if(casilla.getEstado() == 0){
+                    //Cambiar estado destapado
+                    casilla.setEstado(1);
+
+                    //Mostrar el texto en el boton y deshablitar el boton
+                    Button b = (Button) findViewById(casilla.getId());
+                    b.setEnabled(false);
+                    b.setBackgroundResource(R.drawable.custom_button_disabled);
+
+                    if(casilla.getMina() != 0){
+                        b.setText(Integer.toString(casilla.getMina()));
+                    }else{
+                        //Recorrer el contorno de la casilla
+                        for (int x2 = max(0,x-1); x2 < min(tablero.getSettings().getColumns(),x+2); x2++){
+                            for (int y2 = max(0,y-1); y2 < min(tablero.getSettings().getRows(), y+2); y2++){
+                                click(x2,y2,tablero.getCasilla(x2,y2).getId());
+                            }
+                        }
+                    }
+
+                    //Guardar la casilla
+                    tablero.setCasilla(casilla,x,y);
+                }
+            }else{
+                //Comprobar el estado de casilla
+                if(casilla.getEstado() == 0){
+                    //Cambiar estado destapado
+                    casilla.setEstado(1);
+
+                    //Mostrar imagen de explosion en el boton y deshablitar el boton
+                    ImageButton img_b = (ImageButton) findViewById(casilla.getId());
+                    img_b.setImageResource(R.drawable.bomb_click);
+                    img_b.setEnabled(false);
+                    img_b.setBackgroundResource(R.drawable.custom_button_disabled);
+
+                    //Guardar la casilla
+                    tablero.setCasilla(casilla,x,y);
+
+                    //Terminar juego
+                    terminar(false);
+                }
+            }
+        }
+
+    }
+
+    private void terminar(boolean estado){
+        AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+
+        if (estado){
+            //Victoria
+            tablero.setEstado(2);
+
+            //Dialog de victoria
+            dialogo1.setTitle(getText(R.string.victoria_title));
+            dialogo1.setMessage(getText(R.string.victoria_text));
+        }else{
+            //Derrota
+            tablero.setEstado(1);
+
+            //Dialog de derrota
+            dialogo1.setTitle(getText(R.string.derrota_title));
+            dialogo1.setMessage(getText(R.string.derrota_text));
+        }
+
+        dialogo1.setNeutralButton(getText(R.string.dialog_instrucciones_btn), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                dialogo1.dismiss();
+            }
+        });
+        dialogo1.show();
+
+
+        for (int x = 0; x < tablero.getSettings().getColumns(); x++){
+            for(int y = 0; y < tablero.getSettings().getRows(); y++){
+                Casilla casilla = tablero.getCasilla(x,y);
+
+                //Comprobar si la casilla esta tapa
+                if(casilla.getEstado() == 0){
+                    //Comprobar si hay mina
+                    if(casilla.getMina() != 9){
+                        //Obtener el boton
+                        Button b = (Button) findViewById(casilla.getId());
+
+                        //Mostrar el texto en el boton y deshablitar el boton
+                        b.setText(Integer.toString(casilla.getMina()));
+                        b.setEnabled(false);
+                        b.setBackgroundResource(R.drawable.custom_button_disabled);
+                    }else{
+                        //Obtener el image button
+                        ImageButton img_b = (ImageButton) findViewById(casilla.getId());
+
+                        //Mostrar imagen de explosion en el boton y deshablitar el boton
+                        img_b.setImageResource(R.drawable.bomb_click);
+                        img_b.setEnabled(false);
+                        img_b.setBackgroundResource(R.drawable.custom_button_disabled);
+                    }
+                }
+            }
+        }
+    }
 }

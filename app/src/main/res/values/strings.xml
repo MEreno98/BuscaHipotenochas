@@ -12,4 +12,8 @@
     <string name="s_level_1">Principiante</string>
     <string name="s_level_2">Amateur</string>
     <string name="s_level_3">Avanzado</string>
+    <string name="victoria_title">Victoria</string>
+    <string name="victoria_text">Felicidades ha completado el tablero.</string>
+    <string name="derrota_title">Game Over</string>
+    <string name="derrota_text">Insert coin</string>
 </resources>
