@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.Menu;
@@ -223,6 +224,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         GridLayout gl_tablero = (GridLayout) findViewById(R.id.l_tablero);
         gl_tablero.removeAllViews();
 
+        //Habilitar juego
+        ActionMenuItemView ch = (ActionMenuItemView) findViewById(R.id.action_changehipo);
+        if(ch.isEnabled() == false){
+            ch.setEnabled(true);
+        }
+
         //Reiniciar el contador de minas, crear el tablero de nuevo y dibujarlo
         tablero.resetContadorMinas();
         tablero.crearTablero();
@@ -245,6 +252,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        //Dehabilitar el el boton de cambiar
+        ActionMenuItemView ci = (ActionMenuItemView) findViewById(R.id.action_changehipo);
+        if (ci.isEnabled() == true){
+            ci.setEnabled(false);
+        }
+
+        //Recorrer la tabla
         for(int x = 0; x < tablero.getSettings().getColumns(); x++){
             for(int y = 0; y < tablero.getSettings().getRows(); y++){
                 //Llamar al metodo click
@@ -255,6 +269,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onLongClick(View view) {
+        //Dehabilitar el el boton de cambiar
+        ActionMenuItemView ci = (ActionMenuItemView) findViewById(R.id.action_changehipo);
+        if (ci.isEnabled() == true ){
+            ci.setEnabled(false);
+        }
+
+        //Recorrer la tabla
         for(int x = 0; x < tablero.getSettings().getColumns(); x++){
             for(int y = 0; y < tablero.getSettings().getRows(); y++){
                 //Obtener la casilla
@@ -366,6 +387,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void terminar(boolean estado){
         AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+
+        //Habilitar juego
+        ActionMenuItemView ch = (ActionMenuItemView) findViewById(R.id.action_changehipo);
+        if(ch.isEnabled() == false){
+            ch.setEnabled(true);
+        }
 
         if (estado){
             //Victoria
