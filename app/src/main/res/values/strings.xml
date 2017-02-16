@@ -16,4 +16,9 @@
     <string name="victoria_text">Felicidades ha completado el tablero.</string>
     <string name="derrota_title">Game Over</string>
     <string name="derrota_text">Insert coin</string>
+    <string name="icon_1">Icono 1</string>
+    <string name="icon_2">Icono 2</string>
+    <string name="icon_3">Icono 3</string>
+    <string name="icon_4">Icono 4</string>
+    <string name="icon_5">Icono 5</string>
 </resources>
